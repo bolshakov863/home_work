@@ -1,7 +1,8 @@
 from hitbox import Hitbox
 
 hb1 = Hitbox(x=0, y=100, width=100, height=100)
-hb2 = Hitbox(x=150, y=100, width=100, height=100)
+hb2 = Hitbox(x=150, y=80, width=100, height=100)
+
 
 print(f'Верхняя граница hb1:{hb1.top}'
       f'Верхняя граница hb2:{hb2.top}')
