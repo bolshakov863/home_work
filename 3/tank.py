@@ -4,9 +4,10 @@ from tkinter import PhotoImage, NW
 class Tank:
     __count = 0
     __SIZE = 100
-    def __init__(self, canvas, x, y,model = 'Т-14 Армата', ammo = 100, speed = 10, file_up='./img/tank_up.png',
-                 file_down='./img/tank_down.png', file_left='./img/tank_left.png', file_right='./img/tank_right.png'):
-        self.__skin_up = PhotoImage(file=file_up)
+
+    def __init__(self, canvas, x, y,model = 'Т-14 Армата', ammo = 100, speed = 10, file_up = '../img/tank_up.png',
+                 file_down = '../img/tank_down.png', file_left = '../img/tank_left.png', file_right = '../img/tank_right.png'):
+        self.__skin_up = PhotoImage(file=file_up) ,
         self.__skin_down = PhotoImage(file=file_down)
         self.__skin_left = PhotoImage(file=file_left)
         self.__skin_right = PhotoImage(file=file_right)
@@ -25,10 +26,6 @@ class Tank:
             self.__x = 0
         if self.__y < 0:
             self.__y = 0
-
-
-
-
         self.__create()
 
     def fire(self):
@@ -36,7 +33,7 @@ class Tank:
             self.__ammo -= 1
             print('стреляю')
 
-    def forvard(self):
+    def forward(self):
         if self.__fuel > 0:
             self.__y += -self.__speed
             self.__update_hitbox()  # 2.1 вызвать метод движения HB при смене позиции
@@ -69,11 +66,11 @@ class Tank:
             self.__repaint()
 
     def __create(self):
-        self.id = self.__canvas.create_image(self.__x, self.__y, self.__x ,image = self.__skin_up, anchor = NW)
+        self.__id = self.__canvas.create_image(self.__x, self.__y, image = self.__skin_up, anchor = NW)
 
 
     def __repaint(self):
-        self.__canvas.moveto(self.id, x = self.__x, y = self.__y)
+        self.__canvas.moveto(self.__id, x = self.__x, y = self.__y)
 
 
 
