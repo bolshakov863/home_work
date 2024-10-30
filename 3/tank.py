@@ -24,6 +24,8 @@ class Tank:
         self.__y = y
         self.__vx = 0
         self.__vy = 0
+        self.__dx = 0
+        self.__dy = 0
         if self.__x < 0:
             self.__x = 0
         if self.__y < 0:
@@ -62,9 +64,11 @@ class Tank:
 
     def update(self):
         if self.__fuel > self.__speed:
-            self.__x += self.__vx * self.__speed
-            self.__y += self.__vy * self.__speed
-            self.__fuel  -=self.__speed
+            self.__fuel -= self.__speed
+            self.__dx = self.__vx * self.__speed
+            self.__dy = self.__vy * self.__speed
+            self.__x += self.__dx
+            self.__y += self.__dy
             self.__update_hitbox()
             self.__repaint()
 
@@ -124,9 +128,13 @@ class Tank:
     def get_size(self):
         return self.__skin_up.width()
 
-
-
-
+    def undo_move(self):
+        self.__x -= self.__dx
+        self.__y -= self.__dy
+        self.__fuel += self.__speed
+        self.__update_hitbox()
+        self.__repaint()
+        pass
 
 
     def __str__(self):

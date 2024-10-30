@@ -19,6 +19,7 @@ def update():
 def check_collision():
     if player.inersects(enemy):  # 4 Вызвать обертку
         print('Танки столкнулись')
+        player.undo_move()
 
 def key_press(event):
     if event.keycode == KEY_W:
