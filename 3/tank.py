@@ -1,24 +1,28 @@
 from hitbox import Hitbox
 from tkinter import PhotoImage, NW
+from random import randint
+
 
 class Tank:
     __count = 0
     #__SIZE = 100
 
     def __init__(self, canvas, x, y,model = 'Т-14 Армата', ammo = 100, speed = 10, file_up = '../img/tank_up.png',
-                 file_down = '../img/tank_down.png', file_left = '../img/tank_left.png', file_right = '../img/tank_right.png'):
+                 file_down = '../img/tank_down.png', file_left = '../img/tank_left.png', file_right = '../img/tank_right.png', bot = True):
+        self.__target = None
+        self.__bot = bot
         self.__skin_up = PhotoImage(file=file_up)
         self.__skin_down = PhotoImage(file=file_down)
         self.__skin_left = PhotoImage(file=file_left)
         self.__skin_right = PhotoImage(file=file_right)
-        self.__hitbox = Hitbox(x, y, self.get_size(), self.get_size())   # 1. добавить атрибут hitbox
+        self.__hitbox = Hitbox(x, y, self.get_size(), self.get_size(), padding=0)   # 1. добавить атрибут hitbox
         self.__canvas = canvas
         Tank.__count += 1
         self.__model = model
         self.__hp = 100
         self.__xp = 0
         self.__ammo = ammo
-        self.__fuel = 1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+        self.__fuel = 100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
         self.__speed = speed
         self.__x = x
         self.__y = y
@@ -32,6 +36,43 @@ class Tank:
             self.__y = 0
         self.__create()
         self.right()
+
+    def set_target(self, target):
+        self.__target = target
+
+    def __AI(self):
+        #pass
+        if randint(0, 30) == 1:
+            if randint(0, 10) < 9 and self.__target is not None:
+                self.__AI_change_orientation()
+            else:
+                self.__AI_goto_target()
+
+    def __AI_change_orientation(self):
+        rand = randint(0, 3)
+        if rand == 0:
+            self.right()
+        if rand == 1:
+            self.left()
+        if rand == 2:
+            self.backward()
+        if rand == 3:
+            self.forward()
+
+    def __AI_goto_target(self):
+        if randint(1, 2) == 1:
+            if self.__target.get_x() < self.get_x():
+                self.right()
+            else:
+                self.left()
+        else:
+            if self.__target.get_y() < self.get_y():
+                self.forward()
+            else:
+                self.backward()
+
+
+
 
     def fire(self):
         if self.__ammo > 0:
@@ -64,6 +105,8 @@ class Tank:
 
     def update(self):
         if self.__fuel > self.__speed:
+            if self.__bot:
+                self.__AI()
             self.__fuel -= self.__speed
             self.__dx = self.__vx * self.__speed
             self.__dy = self.__vy * self.__speed
@@ -92,9 +135,14 @@ class Tank:
 
 
 
-#    3   метод проверки столкновения - обертка
+#    3 метод проверки столкновения - обертка
     def inersects(self, other_tank):
-        return self.__hitbox.intersects(other_tank.__hitbox)
+        value = self.__hitbox.intersects(other_tank.__hitbox)
+        if value:
+            self.undo_move()
+            if self.__bot:
+                self.__AI_change_orientation()
+        return value
 
     def get_x(self):
         return self.__x
@@ -129,12 +177,15 @@ class Tank:
         return self.__skin_up.width()
 
     def undo_move(self):
+        if self.__dx == 0 and self.__dy == 0:
+            return
         self.__x -= self.__dx
         self.__y -= self.__dy
-        self.__fuel += self.__speed
         self.__update_hitbox()
         self.__repaint()
-        pass
+        self.__dx = 0
+        self.__dy = 0
+
 
 
     def __str__(self):

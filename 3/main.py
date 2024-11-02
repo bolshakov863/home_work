@@ -12,14 +12,17 @@ FPS = 60
 
 def update():
     player.update()
+    enemy.update()
     check_collision()
     w.after(1000//FPS, update)
 
 
 def check_collision():
-    if player.inersects(enemy):  # 4 Вызвать обертку
+    player.inersects(enemy)
+    enemy.inersects(player)
+    if enemy.inersects(player):  # 4 Вызвать обертку
         print('Танки столкнулись')
-        player.undo_move()
+        enemy.undo_move()
 
 def key_press(event):
     if event.keycode == KEY_W:
@@ -36,8 +39,9 @@ w = Tk()
 w.title('Танки на минималках 2.0')
 canv = Canvas(w, width = 800, height = 600, bg = 'alice blue')
 canv.pack()
-player = Tank(canvas = canv, x = 100, y = 50, ammo = 100, speed=1)
-enemy = Tank(canvas = canv, x = 500, y = 150, ammo = 100)
+player = Tank(canvas = canv, x = 100, y = 50, ammo = 100, speed=2, bot = False)
+enemy = Tank(canvas = canv, x = 500, y = 150, ammo = 100, speed=2, bot = True)
+enemy.set_target(player)
 w.bind('<KeyPress>', key_press)
 update()
 w.mainloop()
