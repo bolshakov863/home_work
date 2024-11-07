@@ -38,15 +38,6 @@ class Tank:
         self.__create()
         self.right()
 
-    def __check_out_of_world(self):
-        if self.__hitbox.left < 0 or \
-            self.__hitbox.top < 0 or \
-            self.__hitbox.right > world.WIDTH or \
-            self.__hitbox.bottom >= world.HEIGHT:
-           self.__undo_move()
-           if self.__bot:
-               self.__AI_change_orientation()
-
     def set_target(self, target):
         self.__target = target
 
@@ -80,8 +71,6 @@ class Tank:
                 self.forward()
             else:
                 self.backward()
-
-
 
 
     def fire(self):
@@ -197,8 +186,18 @@ class Tank:
         self.__dx = 0
         self.__dy = 0
 
+    def __check_out_of_world(self):
+        if self.__hitbox.left < 0 or \
+            self.__hitbox.top < 0 or \
+            self.__hitbox.right > world.WIDTH or \
+            self.__hitbox.bottom >= world.HEIGHT:
+           self.__undo_move()
+           if self.__bot:
+               self.__AI_change_orientation()
+
 
 
     def __str__(self):
         return (f'координаты: x = {self.__x}, y = {self.__y}, модель: {self.__model}, '
                 f'здоровье: {self.__hp}, опыт: {self.__xp}, боеприпасы: {self.__ammo}')
+
