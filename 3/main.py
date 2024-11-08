@@ -1,5 +1,6 @@
 from tank import Tank
 from tkinter import*
+import world
 
 
 
@@ -37,7 +38,7 @@ def key_press(event):
                                    # смоделировать ситуацию столкновения
 w = Tk()
 w.title('Танки на минималках 2.0')
-canv = Canvas(w, width = 800, height = 600, bg = 'alice blue')
+canv = Canvas(w, width=world.WIDTH, height=world.HEIGHT, bg = 'alice blue')
 canv.pack()
 player = Tank(canvas = canv, x = 100, y = 50, ammo = 100, speed=2, bot = False)
 enemy = Tank(canvas = canv, x = 500, y = 150, ammo = 100, speed=2, bot = True)

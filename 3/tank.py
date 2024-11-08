@@ -176,7 +176,9 @@ class Tank:
     def get_size(self):
         return self.__skin_up.width()
 
-    def undo_move(self):
+
+
+    def __undo_move(self):
         if self.__dx == 0 and self.__dy == 0:
             return
         self.__x -= self.__dx
@@ -188,16 +190,16 @@ class Tank:
 
     def __check_out_of_world(self):
         if self.__hitbox.left < 0 or \
-            self.__hitbox.top < 0 or \
-            self.__hitbox.right > world.WIDTH or \
-            self.__hitbox.bottom >= world.HEIGHT:
-           self.__undo_move()
-           if self.__bot:
-               self.__AI_change_orientation()
-
-
+                self.__hitbox.top < 0 or \
+                self.__hitbox.right > world.WIDTH or \
+                self.__hitbox.bottom >= world.HEIGHT:
+            self.__undo_move()
+            if self.__bot:
+                self.__AI_change_orientation()
 
     def __str__(self):
         return (f'координаты: x = {self.__x}, y = {self.__y}, модель: {self.__model}, '
                 f'здоровье: {self.__hp}, опыт: {self.__xp}, боеприпасы: {self.__ammo}')
+
+
 
