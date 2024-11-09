@@ -9,7 +9,8 @@ class Tank:
     #__SIZE = 100
 
     def __init__(self, canvas, x, y,model = 'Т-14 Армата', ammo = 100, speed = 10, file_up = '../img/tank_up.png',
-                 file_down = '../img/tank_down.png', file_left = '../img/tank_left.png', file_right = '../img/tank_right.png', bot = True):
+                 file_down = '../img/tank_down.png', file_left = '../img/tank_left.png',
+                 file_right = '../img/tank_right.png', bot = True):
         self.__target = None
         self.__bot = bot
         self.__skin_up = PhotoImage(file=file_up)
@@ -37,6 +38,15 @@ class Tank:
             self.__y = 0
         self.__create()
         self.right()
+
+    def __check_out_of_world(self):
+        if self.__hitbox.left < 0 or \
+                self.__hitbox.top < 0 or \
+                self.__hitbox.right > world.WIDTH or \
+                self.__hitbox.bottom >= world.HEIGHT:
+            self.__undo_move()
+            if self.__bot:
+                self.__AI_change_orientation()
 
     def set_target(self, target):
         self.__target = target
@@ -72,35 +82,35 @@ class Tank:
             else:
                 self.backward()
 
-
     def fire(self):
         if self.__ammo > 0:
             self.__ammo -= 1
             print('стреляю')
+
+    def stop(self):
+        self.__vx = 0
+        self.__vy = 0
+
 
     def forward(self):
         self.__vx = 0
         self.__vy = -1
         self.__canvas.itemconfig(self.__id, image=self.__skin_up)
 
-
     def backward(self):
         self.__vx = 0
         self.__vy = 1
         self.__canvas.itemconfig(self.__id, image=self.__skin_down)
-
 
     def left(self):
         self.__vx = -1
         self.__vy =0
         self.__canvas.itemconfig(self.__id, image=self.__skin_left)
 
-
     def right(self):
         self.__vx = 1
         self.__vy = 0
         self.__canvas.itemconfig(self.__id, image=self.__skin_right)
-
 
     def update(self):
         if self.__fuel > self.__speed:
@@ -116,30 +126,23 @@ class Tank:
             self.__repaint()
 
     def __create(self):
-        self.__id = self.__canvas.create_image(self.__x, self.__y, image = self.__skin_up, anchor = NW)
-
+        self.__id = self.__canvas.create_image(self.__x, self.__y,
+                                               image = self.__skin_up, anchor = NW)
 
     def __repaint(self):
-        self.__canvas.moveto(self.__id, x = self.__x, y = self.__y)
-
-
+        self.__canvas.moveto(self.__id,
+                             x = world.get_screen_x(self.__x),
+                             y = world.get_screen_y(self.__y))
 
     #  2 метод движения хитбокса
     def __update_hitbox(self):
         self.__hitbox.moveto(self.__x, self.__y)
 
-
-
-
-
-
-
-
 #    3 метод проверки столкновения - обертка
     def inersects(self, other_tank):
         value = self.__hitbox.intersects(other_tank.__hitbox)
         if value:
-            self.undo_move()
+            self.__undo_move()
             if self.__bot:
                 self.__AI_change_orientation()
         return value
@@ -176,8 +179,6 @@ class Tank:
     def get_size(self):
         return self.__skin_up.width()
 
-
-
     def __undo_move(self):
         if self.__dx == 0 and self.__dy == 0:
             return
@@ -187,15 +188,6 @@ class Tank:
         self.__repaint()
         self.__dx = 0
         self.__dy = 0
-
-    def __check_out_of_world(self):
-        if self.__hitbox.left < 0 or \
-                self.__hitbox.top < 0 or \
-                self.__hitbox.right > world.WIDTH or \
-                self.__hitbox.bottom >= world.HEIGHT:
-            self.__undo_move()
-            if self.__bot:
-                self.__AI_change_orientation()
 
     def __str__(self):
         return (f'координаты: x = {self.__x}, y = {self.__y}, модель: {self.__model}, '

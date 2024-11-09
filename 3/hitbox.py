@@ -34,7 +34,6 @@ class Hitbox:
     def __set_y(self, y):
         self.__y = y
 
-
     def moveto(self, x, y):
         self.__set_x(x)
         self.__set_y(y)
@@ -43,10 +42,8 @@ class Hitbox:
         self.__set_x(dx + self.__get_x())
         self.__set_y(dy + self.__get_y())
 
-
     def __str__(self):
         return f"({self.__x=}, {self.__y=}, {self.__width=}, {self.__height=})"
-
 
     def __get_top(self):
         return self.y + self.pad
@@ -59,7 +56,6 @@ class Hitbox:
 
     def __get_right(self):
         return self.x + self.width - self.pad
-
 
     def intersects(self, other):
         if self.left > other.right:
