@@ -1,9 +1,35 @@
+
+import texture
+from tkinter import NW
+
+BLOCK_SIZE = 64
+GROUND = 'g'
+WATER = 'w'
+CONCRETE = 'c'
+BRICK = 'b'
 _camera_x = 0
 _camera_y = 0
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
 WIDTH = SCREEN_WIDTH * 6
 HEIGHT = SCREEN_HEIGHT * 4
+_canvas = None
+_map = []
+
+def create_map(rows = 20, cols = 20):
+    global _map
+    _map = []
+    for i in range(rows): # x
+        row = []
+        for j in range(cols): # y
+            cell = _Cell(BLOCK_SIZE * i, BLOCK_SIZE * j, CONCRETE, _canvas)
+            row.append(cell)
+        _map.append(row)
+
+def initialize(canv):
+    global _canvas, _map
+    _canvas = canv
+    create_map(20, 20)
 
 def set_camera_xy(x, y):
     global _camera_x, _camera_y
@@ -30,4 +56,26 @@ def get_screen_x(world_x):
 
 def get_screen_y(world_y):
     return world_y - _camera_y
+
+class _Cell:
+   def __init__(self, x, y, block, canvas):
+          self.__x = x
+          self.__y = y
+          self.__canvas = canvas
+          self.__block = block
+          self.__create_element(block)
+
+   def __create_element(self, block):
+       if block != GROUND:
+           self.__id = self.__canvas.create_image(self.__x, self.__y,
+                                                  image = texture.get(block),anchor = NW)
+
+   def __del__(self):
+       try:
+           self.__canvas.delete(self.__id)
+       except:
+           pass
+
+   def get_block(self):
+       return self.__block
 
