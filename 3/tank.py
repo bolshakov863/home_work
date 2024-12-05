@@ -130,9 +130,7 @@ class Tank:
                                                image = skin.get('file_up'), anchor = NW)
 
     def __repaint(self):
-        self.__canvas.moveto(self.__id,
-                             x = world.get_screen_x(self.__x),
-                             y = world.get_screen_y(self.__y))
+        self.__canvas.moveto(self.__id,x = world.get_screen_x(self.__x),y = world.get_screen_y(self.__y))
 
     #  2 метод движения хитбокса
     def __update_hitbox(self):

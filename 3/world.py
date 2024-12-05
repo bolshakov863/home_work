@@ -78,11 +78,12 @@ def set_camera_xy(x, y):
     _camera_x = x
     _camera_y = y
 
+
 def move_camera(delta_x, delta_y):
     set_camera_xy(_camera_x + delta_x, _camera_y + delta_y)
 
 def get_screen_x(world_x):
-    return world_x - _camera_x
+        return world_x - _camera_x
 
 def get_screen_y(world_y):
     return world_y - _camera_y
@@ -98,14 +99,11 @@ class _Cell:
    def update(self):
        if self.__block == GROUND:
            return
-       screen_x = self.get_screen_x(self.__x)
-       screen_y = self.get_screen_y(self.__y)
-       self.__canvas.moveto(self.__id,x=screen_x, y=screen_y)
+       screen_x = get_screen_x(self.__x)
+       screen_y = get_screen_y(self.__y)
+       self.__canvas.moveto(self.__id, x=screen_x, y=screen_y)
        if self.__block == GROUND:
            return
-
-
-
 
    def __create_element(self, block):
        if block != GROUND:
@@ -120,5 +118,6 @@ class _Cell:
 
    def get_block(self):
        return self.__block
+
 
 
