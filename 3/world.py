@@ -1,4 +1,4 @@
-from aifc import Aifc_read
+
 from random import randint, choice
 import texture
 from tkinter import NW
