@@ -49,14 +49,13 @@ def key_press(event):
 
 def load_textures():
     texture.load("file_up", "../img/tank_up.png")
-    texture.load("file_down", "../img/tank_down.png")
+    texture.load("file_down", "../img/tank_down .png")
     texture.load("file_left", "../img/tank_left.png")
     texture.load("file_right", "../img/tank_right.png")
     texture.load(world.BRICK, "../img/brick.png")
     texture.load(world.WATER, "../img/water.png")
     texture.load(world.CONCRETE, "../img/wall.png")
     print(texture._frames)
-
 
 w = Tk()
 load_textures()
