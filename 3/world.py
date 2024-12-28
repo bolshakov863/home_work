@@ -19,6 +19,32 @@ HEIGHT = SCREEN_HEIGHT * 4
 _canvas = None
 _map = []
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+
+=======
+=======
+>>>>>>> 5583c73e3b067202dc21538001df53d60a8e4629
+def load_map(file_name):
+    global map
+
+    _map = []
+    with open(file_name) as f:
+        i = 0
+        for line in f:
+            blocks = line.split()
+            row = []
+            for j in range(len(blocks)):
+                cell = _Cell(j * BLOCK_SIZE, i * BLOCK_SIZE, _canvas, blocks[j])
+            _map.append(row)
+            i+=1
+    f.close()
+<<<<<<< HEAD
+>>>>>>> 5583c73e3b067202dc21538001df53d60a8e4629
+=======
+>>>>>>> 5583c73e3b067202dc21538001df53d60a8e4629
+
 def get_block(row, col):
     if row < 0 or col < 0 or row >= get_rows() \
             or col >= get_cols():
@@ -82,9 +108,13 @@ def create_map(rows = 20, cols = 20):
 def initialize(canv):
     global _canvas
     _canvas = canv
-    create_map(20, 20)
+   # create_map(25, 25)
+    load_map('./map/1.tmap.py')
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 5583c73e3b067202dc21538001df53d60a8e4629
 
 def set_camera_xy(x, y):
     global _camera_x, _camera_y
@@ -108,7 +138,7 @@ def move_camera(delta_x, delta_y):
     set_camera_xy(_camera_x + delta_x, _camera_y + delta_y)
 
 def get_screen_x(world_x):
-        return world_x - _camera_x
+    return world_x - _camera_x
 
 def get_screen_y(world_y):
     return world_y - _camera_y

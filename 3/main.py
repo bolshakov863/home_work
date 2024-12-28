@@ -57,6 +57,7 @@ def load_textures():
     texture.load(world.CONCRETE, "../img/wall.png")
     print(texture._frames)
 
+
 w = Tk()
 load_textures()
 w.title('Танки на минималках 2.0')
