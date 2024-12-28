@@ -10,6 +10,7 @@ GROUND = 'g'
 WATER = 'w'
 CONCRETE = 'c'
 BRICK = 'b'
+MISSLE = 'm'
 _camera_x = 0
 _camera_y = 0
 SCREEN_WIDTH = 800
@@ -19,32 +20,9 @@ HEIGHT = SCREEN_HEIGHT * 4
 _canvas = None
 _map = []
 
-def load_map(file_name):
-    global map
 
-    _map = []
-    with open(file_name) as f:
-        i = 0
-        for line in f:
-            blocks = line.split()
-            row = []
-            for j in range(len(blocks)):
-                cell = _Cell(j * BLOCK_SIZE, i * BLOCK_SIZE, _canvas, blocks[j])
-            _map.append(row)
-            i+=1
-    f.close()
 
-def get_block(row, col):
-    if row < 0 or col < 0 or row >= get_rows() \
-            or col >= get_cols():
-        return AIR
-    else:
-        return _map[row][col].get_block()
 
-def update_cell(row, col):
-    if row < 0 or col < 0 or row >= get_rows() or col >= get_cols():
-        return
-    _map[row][col].update()
 
 def update_map():
     first_row = get_row(_camera_y)
@@ -89,7 +67,7 @@ def create_map(rows = 20, cols = 20):
             if i == 0 or j == 0 or i == rows - 1 or j == cols - 1:
                 block = CONCRETE
             elif randint(1, 100) <= 15:
-                block = choice([BRICK, WATER, CONCRETE])
+                block = choice([BRICK, WATER, CONCRETE, MISSLE])
             cell = _Cell(BLOCK_SIZE * j, BLOCK_SIZE * i,block, _canvas)
             row.append(cell)
         _map.append(row)
@@ -97,8 +75,7 @@ def create_map(rows = 20, cols = 20):
 def initialize(canv):
     global _canvas
     _canvas = canv
-   # create_map(25, 25)
-    load_map('./map/1.tmap.py')
+    create_map(20, 20)
 
 def set_camera_xy(x, y):
     global _camera_x, _camera_y
@@ -127,6 +104,30 @@ def get_screen_x(world_x):
 def get_screen_y(world_y):
     return world_y - _camera_y
 
+def get_block(row, col):
+    if _inside_of_map(row, col):
+        return _map[row][col].get_block()
+    return AIR
+
+def update_cell(row, col):
+    if _inside_of_map(row, col):
+        _map[row][col].update()
+
+def destroy(row, col):
+    if row < 1 or col < 1 or row >= get_rows()-1 or col >= get_cols()-1:
+        return False
+    return _map[row][col].destroy()
+
+def _inside_of_map(row, col):
+    if row < 0 or col < 0 or row >= get_rows() or col >= get_cols():
+        return False
+    return True
+
+def take(row, col):
+    if _inside_of_map(row, col):
+        return _map[row][col].take()
+    return AIR
+
 class _Cell:
    def __init__(self, x, y, block, canvas):
           self.__x = x
@@ -136,6 +137,32 @@ class _Cell:
           self.__canvas = canvas
           self.__block = block
           self.__create_element(block)
+
+   def take(self):
+       block = self.get_block()
+       if block == MISSLE:
+           self.set_block(GROUND)
+           return block
+       else:
+           return AIR
+
+   def destroy(self):
+       if self.get_block() == BRICK:
+           self.set_block(GROUND)
+           return True
+       return False
+
+   def set_block(self, block):
+       if self.__block == block:
+           return
+
+       elif block == GROUND:
+           self.__delete_element()
+       elif self.__block == GROUND:
+           self.__create_element(block)
+       else:
+           self.itemconfig(self.__id, image = texture.get(block))
+       self.__block = block
 
    def update(self):
        if self.__block == GROUND:
@@ -154,11 +181,19 @@ class _Cell:
            self.__id = self.__canvas.create_image(self.__screen_x, self.__screen_y,
                                                   image = texture.get(block), anchor = NW)
 
-   def __del__(self):
+   def __delete_element(self):
        try:
            self.__canvas.delete(self.__id)
        except:
            pass
+
+   def __del__(self):
+       #try:
+         #  self.__canvas.delete(self.__id)
+       #except:
+        #   pass
+
+       self.__delete_element()
 
    def get_block(self):
        return self.__block
