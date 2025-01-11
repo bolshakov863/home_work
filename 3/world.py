@@ -20,7 +20,10 @@ HEIGHT = SCREEN_HEIGHT * 4
 _canvas = None
 _map = []
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 
 
 
@@ -75,7 +78,17 @@ def create_map(rows = 20, cols = 20):
 def initialize(canv):
     global _canvas
     _canvas = canv
+<<<<<<< Updated upstream
+
     create_map(20, 20)
+
+    create_map(25, 25)
+
+
+=======
+    create_map(25, 25)
+
+>>>>>>> Stashed changes
 
 def set_camera_xy(x, y):
     global _camera_x, _camera_y
