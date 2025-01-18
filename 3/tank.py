@@ -136,25 +136,25 @@ class Tank:
         self.__vx = 0
         self.__vy = -1
         self.__canvas.itemconfig(self.__id,
-                                 image=skin.get('file_up'))
+                                 image=skin.get('tank_up'))
 
     def backward(self):
         self.__vx = 0
         self.__vy = 1
         self.__canvas.itemconfig(self.__id,
-                                 image=skin.get('file_down'))
+                                 image=skin.get('tank_down'))
 
     def left(self):
         self.__vx = -1
         self.__vy =0
         self.__canvas.itemconfig(self.__id,
-                                 image=skin.get('file_left'))
+                                 image=skin.get('tank_left'))
 
     def right(self):
         self.__vx = 1
         self.__vy = 0
         self.__canvas.itemconfig(self.__id,
-                                 image=skin.get('file_right'))
+                                 image=skin.get('tank_right'))
 
     def update(self):
         if self.__fuel > self.__speed:
@@ -172,7 +172,7 @@ class Tank:
 
     def __create(self):
         self.__id = self.__canvas.create_image(self.__x, self.__y,
-                                               image = skin.get('file_up'), anchor = NW)
+                                               image = skin.get('tank_up'), anchor = NW)
 
     def __repaint(self):
         self.__canvas.moveto(self.__id,x = world.get_screen_x(self.__x),y = world.get_screen_y(self.__y))
@@ -220,7 +220,7 @@ class Tank:
 
     #@staticmethod
     def get_size(self):
-        return skin.get('file_up').width()
+        return skin.get('tank_up').width()
 
     def __undo_move(self):
         if self.__dx == 0 and self.__dy == 0:

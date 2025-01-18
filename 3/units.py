@@ -218,4 +218,22 @@ class Tank(Unit):
     def _set_water_speed(self):
         self._speed = self._water_speed
 
-    def
+    def _on_map_collision(self, details):
+        if world.WATER in details and len(details) == 1:
+            self._set_water_speed()
+        elif world.MISSLE in details:
+            pos = details[world.MISSLE]
+            if world.take(pos['row'], pos['col'])!= world.AIR:
+                self._take_ammo()
+        else:
+            self._undo_move()
+            if self._bot:
+                self._change_orientation()
+
+    def _no_map_collision(self):
+        self._set_usual_speed()
+
+    def _on_intersects(self, other_unit):
+        super()._on_intersects(other_unit)
+        if self._bot:
+            self._change_orientation()
