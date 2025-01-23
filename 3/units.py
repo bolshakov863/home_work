@@ -8,7 +8,7 @@ from random import randint
 
 class Unit:
     def __init__(self, canvas, x, y, speed,
-                 padding, bot, default_image):
+                 pad, bot, default_image):
         self._speed = speed
         self._x = x
         self._y = y
@@ -21,7 +21,7 @@ class Unit:
         self._bot = bot
         self._hitbox = Hitbox(x, y,
                               world.BLOCK_SIZE, world.BLOCK_SIZE,
-                              padding = padding)
+                              padding = pad)
         self._default_image = default_image
         self._left_image = default_image
         self._right_image = default_image
@@ -77,6 +77,7 @@ class Unit:
         self._x = self._dx
         self._y = self._dy
         self._update_hitbox()
+        self._check_map_collision()
         self._repaint()
 
     def _no_map_collision(self):
@@ -154,8 +155,8 @@ class Unit:
 class Tank(Unit):
     def __init__(self, canvas, row, col, bot = True):
         super().__init__(canvas,
-                         col * world.BLOCK_SIZE,
-                         row * world.BLOCK_SIZE,
+                         col*world.BLOCK_SIZE,
+                         row*world.BLOCK_SIZE,
                          2,
                          8,
                          bot,
@@ -189,16 +190,16 @@ class Tank(Unit):
                 self.right()
         else:
             if self._target.get_y() < self.get_y():
-                self.backward()
-            else:
                 self.forward()
+            else:
+                self.backward()
 
     def _AI(self):
         if randint(1,30) == 1:
             if randint(1,10) < 9 and self._target is not None:
-                self._change_orientation()
-            else:
                 self._AI_goto_target()
+            else:
+                self._change_orientation()
 
     def fire(self):
         if self._ammo > 0:

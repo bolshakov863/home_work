@@ -1,5 +1,5 @@
 from random import randint
-from tank import Tank
+from units import Tank
 import world
 
 _tanks = []
@@ -24,7 +24,7 @@ def check_collision(tank):
     for other_tank in _tanks:
         if tank == other_tank:
             continue
-        if tank.inersects(other_tank):
+        if tank.intersects(other_tank):
             return True
     return False
 
