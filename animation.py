@@ -6,7 +6,7 @@ class AnimatedCircle(tk.Canvas):
         super().__init__(master, **kwargs)
 
         # Создаем круг
-        self.circle = self.create_oval(10, 10, 50, 50, fill="blue")
+        self.circle = self.create_oval(10, 10, 50, 50, fill="yellow")
 
         # Запускаем анимацию
         self.animate()
