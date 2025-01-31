@@ -5,6 +5,7 @@ from tkinter import*
 import world
 import tanks_collection
 import texture
+import menu
 
 KEY_W = 87
 KEY_S = 83
@@ -83,5 +84,6 @@ world.initialize(canv)
 tanks_collection.initialize(canv)
 missile_collection.initialize(canv)
 w.bind('<KeyPress>', key_press)
+menu_create(canvas)
 update()
 w.mainloop()
