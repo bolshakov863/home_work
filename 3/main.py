@@ -5,7 +5,7 @@ from tkinter import*
 import world
 import tanks_collection
 import texture
-import menu
+#import menu
 
 KEY_W = 87
 KEY_S = 83
@@ -32,6 +32,8 @@ def update():
 
 def key_press(event):
     player = tanks_collection.get_player()
+    if player.is_destroyed():
+        return
     if event.keycode == KEY_W:
         player.forward()
     elif event.keycode == KEY_S:
@@ -72,6 +74,8 @@ def load_textures():
     texture.load('missile_down','../img/missile_down.png')
     texture.load('missile_left','../img/missile_left.png')
     texture.load('missile_right','../img/missile_right.png')
+
+
     print(texture._frames)
 
 
@@ -84,6 +88,6 @@ world.initialize(canv)
 tanks_collection.initialize(canv)
 missile_collection.initialize(canv)
 w.bind('<KeyPress>', key_press)
-menu_create(canvas)
+#menu.menu_create(canv)
 update()
 w.mainloop()
