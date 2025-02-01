@@ -1,7 +1,7 @@
 import world
 import  texture as skin
 from hitbox import Hitbox
-
+import time
 from tkinter import NW
 from random import randint
 
@@ -168,6 +168,10 @@ class Unit:
     def is_bot(self):
         return self._bot
 
+def create_explosion(canvas, x, y, image):
+    # Функция для создания изображения взрыва
+    explosion_id = canvas.create_image(x, y, image=skin.get('tank_destroy'), anchor=NW)
+    canvas.after(500, lambda: canvas.delete(explosion_id))
 
 class Tank(Unit):
     def __init__(self, canvas, row, col, bot=True):
@@ -196,9 +200,10 @@ class Tank(Unit):
         self._water_speed = self._speed//2
         self._target = None
 
-
-
-
+    def destroy(self):
+        super().destroy()
+        if not self.is_bot():  # Если это не бот-танк, то есть игрок
+            create_explosion(self._canvas, self._x, self._y, 'explosion')
 
     def set_target(self, target):
         self._target = target
