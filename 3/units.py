@@ -168,10 +168,6 @@ class Unit:
     def is_bot(self):
         return self._bot
 
-def create_explosion(canvas, x, y, image):
-    # Функция для создания изображения взрыва
-    explosion_id = canvas.create_image(x, y, image=skin.get('tank_destroy'), anchor=NW)
-    canvas.after(500, lambda: canvas.delete(explosion_id))
 
 class Tank(Unit):
     def __init__(self, canvas, row, col, bot=True):
@@ -192,6 +188,7 @@ class Tank(Unit):
             self._backward_image = 'tank_down_player'
             self._left_image = 'tank_left_player'
             self._right_image = 'tank_right_player'
+            self._death_image = 'tank_destroy'
 
 
         self.forward()
@@ -200,10 +197,7 @@ class Tank(Unit):
         self._water_speed = self._speed//2
         self._target = None
 
-    def destroy(self):
-        super().destroy()
-        if not self.is_bot():  # Если это не бот-танк, то есть игрок
-            create_explosion(self._canvas, self._x, self._y, 'explosion')
+
 
     def set_target(self, target):
         self._target = target
@@ -306,6 +300,36 @@ class Tank(Unit):
                 self.backward()
                 self.fire()
 
+    def show_death_image(self):
+        try:
+            death_image = skin.get(self._death_image)  # Попытка получить текстуру
+        except KeyError:
+            print("Текстура 'death_image' не найдена!")
+            return
+
+        print(f"Coordinates: ({self._x}, {self._y})")
+        self._death_image_id = self._canvas.create_image(
+            self._x,
+            self._y,
+            image=death_image,
+            anchor=NW
+        )
+        self._canvas.tag_raise(self._death_image_id)  # Поднимаем слой изображения вверх
+        self._canvas.after(4000, self.hide_death_image)  # Задержка увеличена до 4 секунд
+
+    def hide_death_image(self):
+        if self._death_image_id is not None:
+            self._canvas.delete(self._death_image_id)
+            self._death_image_id = None
+
+    def destroy(self):
+        print("Танк уничтожен!")  # Логируем событие уничтожения
+        self._destroyed = True
+        self.stop()
+        self._speed = 0
+        if not self.is_bot():  # Показываем картинку только если уничтожен игрок
+            self.show_death_image()
+
 
 class Missile(Unit):
     def __init__(self, canvas, owner):
@@ -346,3 +370,4 @@ class Missile(Unit):
 
         if world.CONCRETE in details:
             self.destroy()
+
