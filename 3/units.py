@@ -308,19 +308,12 @@ class Tank(Unit):
             return
 
         print(f"Coordinates: ({self._x}, {self._y})")
-        self._death_image_id = self._canvas.create_image(
+        self._id = self._canvas.create_image(
             self._x,
             self._y,
             image=death_image,
             anchor=NW
         )
-        self._canvas.tag_raise(self._death_image_id)  # Поднимаем слой изображения вверх
-        self._canvas.after(4000, self.hide_death_image)  # Задержка увеличена до 4 секунд
-
-    def hide_death_image(self):
-        if self._death_image_id is not None:
-            self._canvas.delete(self._death_image_id)
-            self._death_image_id = None
 
     def destroy(self):
         print("Танк уничтожен!")  # Логируем событие уничтожения
@@ -329,6 +322,8 @@ class Tank(Unit):
         self._speed = 0
         if not self.is_bot():  # Показываем картинку только если уничтожен игрок
             self.show_death_image()
+
+    
 
 
 class Missile(Unit):

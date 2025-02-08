@@ -28,7 +28,8 @@ def _get_screen_text():
         return 'Game over'
     if len(_tanks) == 1:
         return 'Победа'
-    return 'Осталось {}'.format(len(_tanks) - 1)
+    return 'Осталось {}'.format(len(_tanks) - 1, )
+
 
 def _update_screen_text():
     _canvas.itemconfig(id_screen_text, text=_get_screen_text())
