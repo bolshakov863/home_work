@@ -323,7 +323,7 @@ class Tank(Unit):
         if not self.is_bot():  # Показываем картинку только если уничтожен игрок
             self.show_death_image()
 
-    
+
 
 
 class Missile(Unit):
