@@ -324,8 +324,6 @@ class Tank(Unit):
             self.show_death_image()
 
 
-
-
 class Missile(Unit):
     def __init__(self, canvas, owner):
         super().__init__(canvas,

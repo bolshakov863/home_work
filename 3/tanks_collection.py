@@ -23,12 +23,14 @@ def initialize(canv):
                                          fill ='white',
                                          anchor = NW)
 
+
+
 def _get_screen_text():
     if get_player().is_destroyed():
         return 'Game over'
     if len(_tanks) == 1:
         return 'Победа'
-    return 'Осталось {}'.format(len(_tanks) - 1, )
+    return f"Осталось {len(_tanks) - 1}\n Здоровье: {get_player()._hp}"
 
 
 def _update_screen_text():
@@ -73,3 +75,4 @@ def spawn(is_bot = True):
         if not check_collision(t):
             _tanks.append(t)
             return t
+
